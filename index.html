@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Watch App Center</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0f172a;
+      --panel: rgba(17, 24, 39, 0.84);
+      --panel-strong: #111827;
+      --card: #182235;
+      --card-2: #0d1729;
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #e5eefc;
+      --muted: #9db0ca;
+      --primary: #4f8cff;
+      --primary-2: #6d5ef8;
+      --green: #2dd4bf;
+      --green-2: #22c55e;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --gray: #64748b;
+      --shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(79,140,255,0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(45,212,191,0.12), transparent 25%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 32px 18px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 30px rgba(79, 140, 255, 0.35);
+      font-size: 20px;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(45, 212, 191, 0.1);
+      border: 1px solid rgba(45, 212, 191, 0.25);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .hero-card, .panel {
+      background: rgba(17, 24, 39, 0.82);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card {
+      padding: 28px 26px;
+      position: relative;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(79,140,255,0.08), transparent 40%, rgba(45,212,191,0.08));
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(79, 140, 255, 0.1);
+      border: 1px solid rgba(79, 140, 255, 0.25);
+      color: #b7cbff;
+      font-size: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin-top: 16px;
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -1px;
+    }
+
+    .subtext {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 620px;
+    }
+
+    .cta-row {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 18px 35px rgba(79, 140, 255, 0.28);
+    }
+
+    .secondary-btn {
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .device-preview {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 280px;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(9,17,28,0.8), rgba(24,34,53,0.9));
+      border-radius: 26px;
+      border: 1px solid var(--line);
+    }
+
+    .watch {
+      position: relative;
+      width: 220px;
+      height: 260px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, #dfeaff, #cad9f3 20%, #b7c9ef 100%);
+      box-shadow:
+        inset 0 0 0 6px rgba(13, 23, 41, 0.9),
+        0 30px 50px rgba(11, 14, 25, 0.52);
+      transform: rotate(-8deg);
+      border: 8px solid rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+    }
+
+    .watch::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(22, 30, 42, 0.8), rgba(13, 20, 31, 0.96));
+      box-shadow: inset 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    .watch-screen {
+      position: absolute;
+      inset: 36px 26px 38px 26px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #0c1727, #13253d);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 12px 12px;
+    }
+
+    .screen-top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #dce7ff;
+      opacity: 0.82;
+    }
+
+    .screen-apps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .mini {
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(79,140,255,0.28), rgba(45,212,191,0.2));
+      border: 1px solid rgba(148,163,184,0.22);
+    }
+
+    .watch-footer {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #dfeaff;
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(45,212,191,0.9);
+    }
+
+    .content {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 22px 20px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-title h3 {
+      font-size: 22px;
+    }
+
+    .device-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(45,212,191,0.1);
+      border: 1px solid rgba(45,212,191,0.25);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .device-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(45,212,191,0.9);
+    }
+
+    .connect-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .connect-box button {
+      width: 100%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      box-shadow: 0 16px 30px rgba(34, 197, 94, 0.22);
+    }
+
+    .status-box {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 14px;
+      text-align: center;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--line);
+      color: var(--text);
+      line-height: 1.6;
+      word-break: break-word;
+      transition: all 0.2s ease;
+    }
+
+    .status-box.info {
+      border-color: rgba(79, 140, 255, 0.4);
+      color: #dfe9ff;
+    }
+
+    .status-box.success {
+      border-color: rgba(45, 212, 191, 0.45);
+      color: #d8fff8;
+      background: rgba(13, 33, 31, 0.8);
+    }
+
+    .status-box.error {
+      border-color: rgba(248, 113, 113, 0.45);
+      color: #ffe5e5;
+      background: rgba(43, 18, 18, 0.8);
+    }
+
+    .device-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .meta-item {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .meta-item strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .upload-box {
+      display: grid;
+      gap: 14px;
+    }
+
+    .upload-box input[type="file"] {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .upload-box button {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 16px 30px rgba(79, 140, 255, 0.25);
+    }
+
+    .upload-box button:disabled {
+      background: var(--gray);
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 0.9;
+    }
+
+    .progress-wrap {
+      display: none;
+      margin-top: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 12px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--green));
+      transition: width 0.2s ease;
+    }
+
+    .warning {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      color: var(--amber);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .hero, .content {
+        grid-template-columns: 1fr;
+      }
+
+      .device-preview {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cta-row {
+        flex-direction: column;
+      }
+
+      .cta-row button {
+        width: 100%;
+      }
+
+      .device-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">⌚</div>
+        <div>Smart Watch App Center</div>
+      </div>
+      <div class="tag">Bluetooth Web App</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">Wearable Installer</div>
+          <h1>Watch apps, files and updates from your browser.</h1>
+          <p class="subtext">
+            Bluetooth-based prototype experience for sending data to compatible smartwatches.
+            Real app installation depends on the watch firmware and supported services.
+          </p>
+
+          <div class="cta-row">
+            <button class="primary-btn" id="heroConnectBtn">Connect Watch</button>
+            <button class="secondary-btn" id="demoBtn">View Demo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="device-preview">
+        <div class="watch">
+          <div class="watch-screen">
+            <div class="screen-top">
+              <span>9:41</span>
+              <span>BT</span>
+            </div>
+
+            <div class="screen-apps">
+              <div class="mini"></div>
+              <div class="mini"></div>
+              <div class="mini"></div>
+              <div class="mini"></div>
+              <div class="mini"></div>
+              <div class="mini"></div>
+            </div>
+
+            <div class="watch-footer">
+              <span class="pulse"></span>
+              <span>Connected</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="panel">
+        <div class="section-title">
+          <h3>Watch Connection</h3>
+          <div class="device-status"><span class="dot"></span> Ready</div>
+        </div>
+
+        <div class="connect-box">
+          <button id="connectBtn">🔵 Connect Watch</button>
+
+          <div id="status" class="status-box info">
+            अभी कोई watch connected नहीं है।
+          </div>
+
+          <div class="device-meta">
+            <div class="meta-item">
+              <strong>Device</strong>
+              <span id="deviceName">Not connected</span>
+            </div>
+            <div class="meta-item">
+              <strong>Protocol</strong>
+              <span>Web Bluetooth</span>
+            </div>
+            <div class="meta-item">
+              <strong>Firmware</strong>
+              <span>Generic/Prototype</span>
+            </div>
+            <div class="meta-item">
+              <strong>Support</strong>
+              <span>Watch dependent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">
+          <h3>App / File Transfer</h3>
+        </div>
+
+        <div class="upload-box">
+          <input id="appFile" type="file" accept=".bin,.apk,.zip,.txt,.json,.img,.hex,.fw" />
+
+          <button id="installBtn" disabled>📥 Install / Send File</button>
+
+          <div id="progressWrap" class="progress-wrap">
+            <div class="progress-head">
+              <span>Transfer Status</span>
+              <span id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="warning">
+            ⚠️ यह generic Bluetooth prototype है। Watch में app install तभी हो सकता है जब उसका firmware app installation को support करता हो।
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let device = null;
+    let server = null;
+
+    const connectBtn = document.getElementById("connectBtn");
+    const heroConnectBtn = document.getElementById("heroConnectBtn");
+    const installBtn = document.getElementById("installBtn");
+    const appFile = document.getElementById("appFile");
+    const status = document.getElementById("status");
+    const deviceName = document.getElementById("deviceName");
+    const progressWrap = document.getElementById("progressWrap");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const demoBtn = document.getElementById("demoBtn");
+
+    const setStatus = (message, type = "info") => {
+      status.textContent = message;
+      status.className = "status-box " + type;
+    };
+
+    const setProgress = (percent) => {
+      progressFill.style.width = percent + "%";
+      progressText.textContent = percent + "%";
+    };
+
+    const safeError = (error) => {
+      if (!error) return "Unknown error";
+      if (error.message) return error.message;
+      return String(error);
+    };
+
+    const connectWatch = async () => {
+      try {
+        if (!navigator.bluetooth) {
+          throw new Error("इस browser में Web Bluetooth उपलब्ध नहीं है।");
+        }
+
+        setStatus("🔍 Bluetooth device खोज रहा है...", "info");
+
+        device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true
+        });
+
+        deviceName.textContent = device.name || "Unknown Device";
+
+        setStatus("🔗 Device से connection बन रहा है...", "info");
+
+        server = await device.gatt.connect();
+
+        setStatus("✅ Bluetooth Connected!", "success");
+        installBtn.disabled = false;
+        document.querySelector(".device-status").innerHTML = '<span class="dot"></span> Connected';
+
+      } catch (error) {
+        setStatus("❌ Connection Error: " + safeError(error), "error");
+      }
+    };
+
+    const connectHandler = () => connectWatch();
+    connectBtn.addEventListener("click", connectHandler);
+    heroConnectBtn.addEventListener("click", connectHandler);
+
+    installBtn.addEventListener("click", async () => {
+      if (!server) {
+        alert("पहले watch connect करो।");
+        return;
+      }
+
+      if (!appFile.files.length) {
+        alert("पहले कोई file select करो।");
+        return;
+      }
+
+      const file = appFile.files[0];
+      const fileName = file.name || "unknown_file";
+
+      progressWrap.style.display = "block";
+      setProgress(0);
+      setStatus("📦 File तैयार हो रही है...", "info");
+
+      try {
+        const services = await server.getPrimaryServices();
+
+        if (services.length === 0) {
+          throw new Error("कोई Bluetooth service नहीं मिली।");
+        }
+
+        let writable = null;
+
+        for (const service of services) {
+          try {
+            const characteristics = await service.getCharacteristics();
+
+            for (const characteristic of characteristics) {
+              const hasWrite =
+                !!characteristic.properties.write ||
+                !!characteristic.properties.writeWithoutResponse;
+
+              if (hasWrite) {
+                writable = characteristic;
+                break;
+              }
+            }
+
+            if (writable) break;
+          } catch (e) {
+            // Ignore service errors and continue scanning
+          }
+        }
+
+        if (!writable) {
+          throw new Error("कोई writable Bluetooth characteristic नहीं मिली।");
+        }
+
+        const data = await file.arrayBuffer();
+        const chunkSize = 180;
+
+        for (let i = 0; i < data.byteLength; i += chunkSize) {
+          const chunk = data.slice(i, Math.min(i + chunkSize, data.byteLength));
+
+          if (writable.properties.writeWithoutResponse) {
+            await writable.writeValueWithoutResponse(chunk);
+          } else {
+            await writable.writeValue(chunk);
+          }
+
+          const progress = Math.round(((i + chunk.byteLength) / data.byteLength) * 100);
+          setProgress(progress);
+          setStatus("📤 Sending: " + progress + "%", "info");
+        }
+
+        setStatus("✅ File Bluetooth device को भेज दी गई! (" + fileName + ")", "success");
+      } catch (error) {
+        setStatus("⚠️ File भेजने में समस्या: " + safeError(error), "error");
+      }
+    });
+
+    demoBtn.addEventListener("click", () => {
+      setStatus("🔎 Demo mode active: connect button is ready to use in supported browser.", "info");
+    });
+  </script>
+</body>
+</html>
